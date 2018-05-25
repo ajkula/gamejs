@@ -2,17 +2,19 @@ class AbstractFighter {
   constructor(objet) {
     this.name = objet.name;
     this.health = objet.health;
+    this.fullHealth = objet.health;
     this.strength = objet.strength;
     this.msg = "";
     this.lost = false;
     this.avoid = objet.avoid;
+    this.potions = objet.potions
   }
   setLife(value) { 
     this.health += value;
     this.health >= 1 ? null : this.lost = true;
   }
   getState() {
-    return { name: this.name, health: this.health, lost: this.lost, strength: this.strength } 
+    return { name: this.name, health: this.health, lost: this.lost, strength: this.strength, potions: this.potions } 
   }
 }
 
