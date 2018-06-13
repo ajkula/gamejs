@@ -1,9 +1,6 @@
-const dice = require('./functions/dice').dice;
-const range = require('./functions/dice').range;
-const Enemy = require('./characters/Characters').Enemy;
-const Player = require('./characters/Characters').Player;
-const PlayerList = require('./characters/PlayerList').PlayerList;
-const Places = require('./json/places')
+const { dice, range } = require('./functions/dice');
+const { PlayerList, Player, Monsters, Enemy } = require('./characters')
+const Places = require('./json/Places')
 
 const avoid = (num) => { 
   const avoid = Math.floor(Math.random() * 100)
@@ -21,19 +18,18 @@ function getEnemies(num = 1) {
   const arr = new Array(rand);
   for(let i = 0; i < arr.length; i++) { arr[i] = RAE(require('./characters/MonstersList').Monsters) }
   return arr;
-}  
+}
 
 const list = []
-
-console.log(list)
-
 getEnemies().forEach(enemy => {
   list.push(new Enemy(enemy));
 })
 
-console.log(dice(2))
-console.log(list)
-console.log(PlayerList)
+console.clear()
+const a = new Places(require('./characters/MonstersList').Monsters)
+console.log(a.places())
+console.log()
+console.log(new Player(RAE(PlayerList)))
 
 // var stdin = process.openStdin();
 // console.log(``)
@@ -44,6 +40,6 @@ console.log(PlayerList)
 //     const method = input.split(" ")
 // })
 
+console.log()
 console.log(avoid(20))
-console.log(avoid(30))
-console.log(avoid(40))
+console.log(range(100))

@@ -1,3 +1,5 @@
+const { dice, range } = require('../functions/dice');
+
 class Places {
   constructor(enemiesArray) {
     this.enemiesArray = enemiesArray;
@@ -20,10 +22,10 @@ class Places {
     ]
 
     this.situation = [
-      { dice: 1, context: 'chest' },
-      { dice: 2, context: 'enemy' },
-      { dice: 3, context: 'seller' },
-      { dice: 4, context: 'ghost' },
+      { context: 'chest' },
+      { context: 'enemy' },
+      { context: 'seller' },
+      // { context: 'ghost' },
     ];
 
     this.seller = [
@@ -32,44 +34,64 @@ class Places {
         " a troll, he seems to propose an object",
       ]
     
-    this.goods = [
-      { item: "potions", quantity: Math.floor(Math.random() * 2) + 1, price: Math.floor(Math.random() * 15) + 5, description: "Heal 20 HP" },
-      { item: "scroll", quantity: Math.floor(Math.random() * 2) + 1, price: Math.floor(Math.random() * 15) + 5, description: "40 Dammage to one enemy" },
-      { item: "doll", quantity: Math.floor(Math.random() * 2), price: Math.floor(Math.random() * 15) + 5, description: "Will revive you with 30 HP" },
-      { item: "key", quantity: Math.floor(Math.random() * 2 + 1), price: Math.floor(Math.random() * 15) + 5, description: "To open locks, chests" },
-      { item: "coins", quantity: Math.floor(Math.random() * 5 + 1), price: 0, description: "A handful of silver and golden coins" },
-      { item: "moonstone", quantity: Math.floor(Math.random() * 2 + 1), price: Math.floor(Math.random() * 15) + 5, description: "Increase your dammage by 5" },
-    ]
+    // this.goods = (function() { return [
+    //   { item: "potions", quantity: Math.floor(Math.random() * 2) + 1, price: Math.floor(Math.random() * 15) + 5, description: "Heal 20 HP" },
+    //   { item: "scroll", quantity: Math.floor(Math.random() * 2) + 1, price: Math.floor(Math.random() * 15) + 5, description: "40 Dammage to one enemy" },
+    //   { item: "doll", quantity: Math.floor(Math.random() * 2), price: Math.floor(Math.random() * 15) + 5, description: "Will revive you with 30 HP" },
+    //   { item: "key", quantity: Math.floor(Math.random() * 2 + 1), price: Math.floor(Math.random() * 15) + 5, description: "To open locks, chests" },
+    //   { item: "coins", quantity: Math.floor(Math.random() * 5 + 1), price: 0, description: "A handful of silver and copper coins" },
+    //   { item: "moonstone", quantity: Math.floor(Math.random() * 2 + 1), price: Math.floor(Math.random() * 15) + 5, description: "Increase your dammage by 5" },
+    // ]})()
   }
-  
+
   RAE(array) {
     return array[Math.floor(Math.random() * (array.length - 1))]
   }
 
-  places(stituationDice = 1) {
-    const situation = this.RAE(this.situation);
+  makeInventory(i) {
+    if (i > 98) return "doll";
+    else if (i > 96) return "moonstone";
+    else if (i > 94) return "scroll";
+    else if (i > 92) return "potions";
+    else if (i > 90) return "key";
+    else return "coins"
+  }
 
-    console.log(this.goods.find((e) => { return e.item === "coins" }))
-    console.log()
+  places(stituationDice = 1) {
+    const context = this.RAE(this.situation).context;
+    const i = range(100);
+
+    const inventory = this.goods().find((e) => { return e.item === this.makeInventory(i) });
+    const item = this.RAE(this.goods());
+
 
     return { 
       place: `You are${this.RAE(this.places1)}\n${this.RAE(this.places2)}\n`,
-      situation: situation,
+      context,
       enemy: this.RAE(this.enemiesArray),
       seller: `There is${this.RAE(this.seller)}`,
-      goods: this.RAE(this.goods)
+      goods: { inventory, item }
     }
+  }
+
+  goods() {
+    return (function() { return [
+      { item: "potions", quantity: Math.floor(Math.random() * 2) + 1, price: Math.floor(Math.random() * 15) + 5, description: "Heal 20 HP" },
+      { item: "scroll", quantity: Math.floor(Math.random() * 2) + 1, price: Math.floor(Math.random() * 15) + 5, description: "15 Dammage to one enemy" },
+      { item: "doll", quantity: Math.floor(Math.random() * 2), price: Math.floor(Math.random() * 15) + 5, description: "Will revive you with 30 HP" },
+      { item: "key", quantity: Math.floor(Math.random() * 2 + 1), price: Math.floor(Math.random() * 15) + 5, description: "To open locks, chests" },
+      { item: "coins", quantity: Math.floor(Math.random() * 5 + 1), price: 0, description: "A handful of silver and copper coins" },
+      { item: "moonstone", quantity: Math.floor(Math.random() * 2 + 1), price: Math.floor(Math.random() * 15) + 5, description: "Increase your dammage by 5" },
+    ]})()
   }
 }  
 
 
 
-console.clear()
-const a = new Places(require('../characters/MonstersList').Monsters)
-console.log(a.places())
+// console.clear()
+// const a = new Places(require('../characters/MonstersList').Monsters)
+// console.log(a.places())
 
-module.exports = Places;
+module.exports = { Places }
 
-console.log(Math.floor(Math.random() * 2))
-console.log(Math.floor(Math.random() * 2) + 1)
-console.log(Math.floor(Math.random() * 100) > 70)
+// console.log(range(100) > 70)
